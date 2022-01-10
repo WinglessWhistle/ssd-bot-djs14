@@ -1,0 +1,15 @@
+{
+  "name": "pdbbot",
+  "version": "1.0.0",
+  "description": "pdb discord bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "author": "WinglessWhistle",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.5.1",
+    "dotenv": "^10.0.0"
+  }
+}
