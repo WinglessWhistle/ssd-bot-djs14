@@ -16,11 +16,30 @@ function LoadCommands(discord) {
 
     for (const file of files) {
         // Import our command and add it to the list.
-        const command = require(`${CommandDir}/${file}`);
+        command = require(`${CommandDir}/${file}`);
         cmdList.set(command.name, command);
 
         // Look cool and tell the world about our newly added command.
         console.log(`\t ${file} Loaded`)
+    }
+
+    // if the HOT_COMMANDS env var exists, watch the commands directory for changes.
+    if (process.env.HOT_COMMANDS) {
+        const watch = require('node-watch');
+
+        watch(CommandDir, { filter: /\.js$/ }, function (evt, name) {
+            if (evt == "update") {
+                const filePath = path.parse(name);
+                if (cmdList.has(filePath.name))
+                    console.log(`${filePath.base} has changed.`);
+                delete require.cache[name];
+                command = require(name);
+                cmdList.delete(command.name, command);
+                cmdList.set(command.name, command);
+                console.log(`${filePath.base} reloaded.`);
+            }
+        });
+        console.log(`Watching ${CommandDir} for changes to commands.`);
     }
 }
 
