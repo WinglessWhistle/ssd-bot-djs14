@@ -24,9 +24,6 @@ function LoadCommands(discord) {
                 const filePath = path.parse(name);
                 if (cmdList.has(filePath.name)) {
                     console.log(`reloading ${filePath.base} 😅.`);
-                    // Delete the old command.
-                    cmdList.delete(command.name, command);
-
                     // Remove the cached version of our file and re-require it.
                     delete require.cache[name];
                     // Load our new command.
@@ -47,9 +44,14 @@ function GetSafe(command) {
 }
 function Load(file) {
     const command = require(file);
+
+    // Delete the old command if it exists.
+    if (cmdList.has(command.name))
+        cmdList.delete(command.name, command);
+
     cmdList.set(command.name, command);
-    
-    if(command.hasOwnProperty('init')) {
+
+    if (command.hasOwnProperty('init')) {
         command.init();
     }
 }

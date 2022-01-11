@@ -23,8 +23,8 @@ function PrintError(channel, e) {
     // Create the embed.
     const embed = new MessageEmbed()
         .setColor("#FF0000")
-        .setTitle("Error")
-        .setDescription(e.toString());
+        .setTitle("Error: " + e.message)
+        .setDescription(e.stack.toString());
 
     // Send a new message with our embed.
     channel.send({ embeds: [embed] });
