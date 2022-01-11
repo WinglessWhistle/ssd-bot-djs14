@@ -8,19 +8,11 @@ cmdList = new Discord.Collection();
 
 // Load all the commands.
 function LoadCommands(discord) {
-    console.log("Loading commands ⏳.");
-
-    // Get all .js files in the commands directory
+    // Get all .js files in the commands directory and load them.
     const files = fs.readdirSync(CommandDir).filter(file => file.endsWith('.js'));
-
-
     for (const file of files) {
-        // Import our command and add it to the list.
-        command = require(`${CommandDir}/${file}`);
-        cmdList.set(command.name, command);
-
-        // Look cool and tell the world about our newly added command.
-        console.log(`\t ${file} Loaded 👌.`)
+        console.log(`Loading ${file} 👌.`);
+        Load(`${CommandDir}/${file}`);
     }
 
     // if the HOT_COMMANDS env var exists, watch the commands directory for changes.
@@ -31,17 +23,14 @@ function LoadCommands(discord) {
             if (evt == "update") {
                 const filePath = path.parse(name);
                 if (cmdList.has(filePath.name)) {
-
+                    console.log(`reloading ${filePath.base} 😅.`);
                     // Delete the old command.
                     cmdList.delete(command.name, command);
 
                     // Remove the cached version of our file and re-require it.
                     delete require.cache[name];
-                    command = require(name);
-
                     // Load our new command.
-                    cmdList.set(command.name, command);
-                    console.log(`${filePath.base} reloaded 😅.`);
+                    Load(name)
                 }
             }
         });
@@ -55,6 +44,14 @@ function GetSafe(command) {
         return cmdList.get(command);
     }
     return false;
+}
+function Load(file) {
+    const command = require(file);
+    cmdList.set(command.name, command);
+    
+    if(command.hasOwnProperty('init')) {
+        command.init();
+    }
 }
 
 
