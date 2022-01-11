@@ -37,10 +37,15 @@ client.on('guildMemberAdd', guildMember => {
 
 
 client.on('message', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    // Bail out if a bot is trying to do stuff.
+    if (message.author.bot)
+        return;
 
-    // Split the message on each space character, drop the first arg and use it as our command.
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = ParseInput(message.content);
+    if (args == false)
+        return;
+
+    // Pull the first arg out and use it as our command.
     const command = args.shift().toLowerCase();
 
     // Attempt to run the command.
@@ -51,7 +56,7 @@ client.on('message', message => {
 
         // Throw an exception if the command doesn't exits.
         else {
-            throw new Error(`The \`${prefix}${command}\` command does not exist.`);
+            throw new Error(`The \`${command}\` command does not exist.`);
         }
     }
     // If there's ANY error. Pass it off the the ErrorMsg module.
@@ -59,6 +64,27 @@ client.on('message', message => {
         ErrorMsg.HandleError(message, e);
     }
 });
+
+function ParseInput(msg) {
+    args = null;
+    // Remove either the @bot part of the message or exit out when we don't start with !.
+    if (msg.startsWith(`<@!${client.user.id}>`))
+        msg = msg.slice(client.user.id.length + 4);
+    else if (!msg.startsWith(prefix))
+        return false
+    
+    // Split our args up on each space.
+    args = msg.split(/ +/);
+
+    // Remove any empty args.
+    args = args.filter(function (entry) { return /\S/.test(entry); });
+
+    // Remove our prefix (if it exists) from the first arg.
+    if(args[0].startsWith(prefix))
+        args[0] = args[0].slice(prefix.length);
+
+    return args;
+}
 
 //Must Be Bottom Of File
 client.login(process.env.BOT_TOKEN);

@@ -3,3 +3,4 @@
 
 # This is useless, nobody needs to see this except nodejs.
 node_modules
+package-lock.json
