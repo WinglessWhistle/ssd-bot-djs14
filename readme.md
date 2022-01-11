@@ -10,3 +10,11 @@ If so, you can PR commands in! Just make sure I know who you are.
 
 Right now our little bot is named Clippy.
 Yellow hasn't been seen for a few weeks, that's kinda sus bro.
+
+## How do I run it.
+
+- Clone this repository.
+- Install node.js v16 and above along with npm.
+- run `npm install` to install all the dependences for the bot.
+- Add the token environment variable `BOT_TOKEN` with your token. Alternatively use the `.env` file.
+- Run the bot with `npm run start`.
