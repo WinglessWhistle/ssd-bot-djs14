@@ -16,6 +16,13 @@ const client = new Discord.Client({
 
 const prefix = '!';
 
+client.on('ready', () => {
+    console.log('Status set 👌');
+    client.user.setActivity('For Commands.', {
+        type: 'WATCHING',
+    });
+});
+
 // Load create our context and load our commands.
 const Context = {
     discord: Discord,
