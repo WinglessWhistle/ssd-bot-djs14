@@ -30,6 +30,7 @@ client.once('ready', () => {
 })
 
 // TODO: Can this be moved into another file or directory like events? What does it do @wingless?
+// Wjem someone join it says "Welcome @PersonsName" kinda useless but it is what it is.
 client.on('guildMemberAdd', guildMember => {
 
     guildMember.guild.channels.cache.get('756455138977251433').send(`Welcome <@${guildMember.user.id}>!`)
