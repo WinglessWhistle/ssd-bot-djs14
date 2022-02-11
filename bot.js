@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const path = require('path');
 const Commands = require('./src/commands.js');
 const ErrorMsg = require('./src/reaction_errors.js');
 require('dotenv').config();
@@ -27,7 +28,9 @@ client.on('ready', () => {
 const Context = {
     discord: Discord,
     commands: Commands,
-    prefix
+    prefix,
+    assets: path.join(__dirname, "assets"),
+    DoCommand
 }
 Commands.LoadCommands(Discord);
 
@@ -45,6 +48,10 @@ client.on('guildMemberAdd', guildMember => {
 
 
 client.on('message', message => {
+    DoCommand(message);
+});
+
+function DoCommand(message) {
     // Bail out if a bot is trying to do stuff.
     if (message.author.bot)
         return;
@@ -71,7 +78,7 @@ client.on('message', message => {
     catch (e) {
         ErrorMsg.HandleError(message, e);
     }
-});
+}
 
 function ParseInput(msg) {
     args = null;
