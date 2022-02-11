@@ -18,7 +18,7 @@ const client = new Discord.Client({
 const prefix = '!';
 
 client.on('ready', () => {
-    console.log('Status set 👌');
+    log("Bot", 'Status set 👌');
     client.user.setActivity('For Commands.', {
         type: 'WATCHING',
     });
@@ -30,13 +30,13 @@ const Context = {
     commands: Commands,
     prefix,
     assets: path.join(__dirname, "assets"),
-    DoCommand
+    DoCommand,
+    log
 }
-Commands.LoadCommands(Discord);
-
+Commands.LoadCommands(Discord, Context);
 
 client.once('ready', () => {
-    console.log('SSD bot alive and ready. 😌');
+    log("Bot", 'SSD bot alive and ready. 😌');
 })
 
 // TODO: Can this be moved into another file or directory like events? What does it do @wingless?
@@ -67,7 +67,7 @@ function DoCommand(message) {
     try {
         cmd = Commands.GetSafe(command);
         if (cmd != false)
-            cmd.execute(Context, message, args);
+            cmd.execute(message, args);
 
         // Throw an exception if the command doesn't exits.
         else {
@@ -78,6 +78,10 @@ function DoCommand(message) {
     catch (e) {
         ErrorMsg.HandleError(message, e);
     }
+}
+
+function log(source, msg) {
+    console.log(`${source.padEnd(30)}: ${msg}`)
 }
 
 function ParseInput(msg) {

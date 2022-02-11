@@ -5,13 +5,15 @@ const Discord = require('discord.js');
 const CommandDir = path.join(__dirname, "..", "commands");
 
 cmdList = new Discord.Collection();
+context = null;
 
 // Load all the commands.
-function LoadCommands(discord) {
+function LoadCommands(discord, newContext) {
+    context = newContext;
     // Get all .js files in the commands directory and load them.
     const files = fs.readdirSync(CommandDir).filter(file => file.endsWith('.js'));
     for (const file of files) {
-        console.log(`Loading ${file} 👌.`);
+        context.log("Command Manager", `Loading ${file} 👌.`);
         Load(`${CommandDir}/${file}`);
     }
 
@@ -23,7 +25,7 @@ function LoadCommands(discord) {
             if (evt == "update") {
                 const filePath = path.parse(name);
                 if (cmdList.has(filePath.name)) {
-                    console.log(`reloading ${filePath.base} 😅.`);
+                    context.log("Command Manager",`reloading ${filePath.base} 😅.`);
                     // Remove the cached version of our file and re-require it.
                     delete require.cache[name];
                     // Load our new command.
@@ -31,7 +33,7 @@ function LoadCommands(discord) {
                 }
             }
         });
-        console.log("Watching commands for changes 👀.");
+        context.log("Command Manager","Watching commands for changes 👀.");
     }
 }
 
@@ -50,6 +52,10 @@ function Load(file) {
         cmdList.delete(command.name, command);
 
     cmdList.set(command.name, command);
+
+    if (command.hasOwnProperty('context')) {
+        command.context = this.context;
+    }
 
     if (command.hasOwnProperty('init')) {
         command.init();

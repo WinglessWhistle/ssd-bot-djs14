@@ -1,7 +1,8 @@
 module.exports = {
     name: 'help',
     description: "displays this message",
-    execute(context, message, args) {
+    context,
+    execute(message, args) {
 
         // make some variable names a little shorter.
         const commands = context.commands.List;

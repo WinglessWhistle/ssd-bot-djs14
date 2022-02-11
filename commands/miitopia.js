@@ -27,7 +27,7 @@ const phrases = [
 // A list of all files and their durations.
 let durationMap = new Map();
 
-function Main(context, message, args) {
+function execute(message, args) {
 
     // Get only images and videos from the message attachments.
     attachments = message.attachments.filter(
@@ -41,6 +41,8 @@ function Main(context, message, args) {
 
     // React with some emoji to let the user know we are processing stuff.
     message.react('⏳');
+
+    this.context.log(this.name, `Processing ${attachments.length}`);
 
     // Process each attachment.
     attachments.forEach((value, key, attachments) => {
@@ -111,8 +113,7 @@ function getRandomKey(collection) {
     let keys = Array.from(collection.keys());
     return keys[Math.floor(Math.random() * keys.length)];
 }
-function OnLoad() {
-
+function init() {
     // Define the path to our durations file.
     const durationsFile = path.join(sounds, "durations.json");
 
@@ -123,16 +124,16 @@ function OnLoad() {
             // Write our updated durationMap to a file.
             fs.writeFile(durationsFile, JSON.stringify(Array.from(durationMap.entries())), (err) => {
                 if (err) {
-                    console.log("Unable to save durations.json")
+                    this.context.log(this.name, "Unable to save durations.json")
                     throw err;
                 }
-                console.log(`${durationMap.size} durations saved to durations.json.`);
+                this.context.log(this.name, `${durationMap.size} durations saved to durations.json.`);
             });
         }
         // So, we opened our duration file just fine. Let's attempt to read it.
         else {
             durationMap = new Map(JSON.parse(data));
-            console.log(`${durationMap.size} durations loaded from durations.json`);
+            this.context.log(this.name, `${durationMap.size} durations loaded from durations.json`);
         }
     }));
 }
@@ -142,7 +143,7 @@ function ScanDuration() {
         try {
             const child = spawnSync("ffprobe", ["-v", "quiet", "-of", "json", "-show_format", file], { cwd: sounds });
             var obj = JSON.parse(child.stdout.toString());
-            console.log(`${file} = ${obj.format.duration}s`);
+            this.context.log(this.name, `${file} = ${obj.format.duration}s`);
             if (obj.format.duration > duration)
                 durationMap.set(file, obj.format.duration);
         } catch (error) {
@@ -152,6 +153,7 @@ function ScanDuration() {
 module.exports = {
     name: 'miitopia',
     description: "Replace your image with miitopia",
-    execute: Main,
-    init: OnLoad,
+    context,
+    execute,
+    init,
 }

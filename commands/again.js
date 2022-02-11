@@ -3,8 +3,9 @@ const { MessageAttachment } = require("discord.js");
 const path = require("path");
 module.exports = {
     name: 'again',
+    context,
     description: "Attempt to run the previous \"!\" command.",
-    execute(context, message, args) {
+    execute(message, args) {
 
         // Get the last 5 messages from the channel.
         message.channel.messages.fetch({ limit: 25 }).then(messages => {

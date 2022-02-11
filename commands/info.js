@@ -1,12 +1,12 @@
 const { exec } = require("child_process");
 const { MessageEmbed } = require("discord.js");
 const { hostname } = require("os");
-const { init } = require("./miitopia");
+const { init } = require("./miitopia.js");
 gitDetails = null;
     module.exports = {
         name: 'info',
         description: "displays info for this bot.",
-        execute(context, message, args) {
+        execute(message, args) {
             const embed = new MessageEmbed()
                 .setColor("GREEN")
                 .setTitle("info")
