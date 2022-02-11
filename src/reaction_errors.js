@@ -1,5 +1,6 @@
 // This module allows errors to be optionally sent to the user. It uses discord embeds.
 const { MessageEmbed } = require("discord.js");
+const { hostname } = require("os");
 
 const ErrorEmoji = '⚠️';
 
@@ -24,7 +25,9 @@ function PrintError(channel, e) {
     const embed = new MessageEmbed()
         .setColor("#FF0000")
         .setTitle("Error: " + e.message)
-        .setDescription(e.stack.toString());
+        .setDescription(e.stack.toString())
+        .addField("Host", "" + hostname)
+        .addField("File", "" + __filename);
 
     // Send a new message with our embed.
     channel.send({ embeds: [embed] });
