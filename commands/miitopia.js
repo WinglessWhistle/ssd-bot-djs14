@@ -118,11 +118,11 @@ function init() {
     const durationsFile = path.join(sounds, "durations.json");
 
     // Read the file, if we have an issue, just re-san and create a new one.
-    if (fs.readFile(durationsFile, (err, data) => {
+    if (fs.readFileSync(durationsFile, (err, data) => {
         if (err) {
             ScanDuration();
             // Write our updated durationMap to a file.
-            fs.writeFile(durationsFile, JSON.stringify(Array.from(durationMap.entries())), (err) => {
+            fs.writeFileSync(durationsFile, JSON.stringify(Array.from(durationMap.entries())), (err) => {
                 if (err) {
                     this.context.log(this.name, "Unable to save durations.json")
                     throw err;

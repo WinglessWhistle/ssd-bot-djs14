@@ -58,7 +58,12 @@ function Load(file) {
     }
 
     if (command.hasOwnProperty('init')) {
-        command.init();
+        try {
+            command.init();
+        } catch (error) {
+            this.context.log(command.name, `Failed to init: ${error}`);
+            cmdList.delete(command.name, command);
+        }
     }
 }
 

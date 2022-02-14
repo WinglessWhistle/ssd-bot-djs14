@@ -81,7 +81,7 @@ function DoCommand(message) {
 }
 
 function log(source, msg) {
-    console.log(`${source.padEnd(30)}: ${msg}`)
+    console.log(`${source.padEnd(20)}: ${msg}`)
 }
 
 function ParseInput(msg) {
