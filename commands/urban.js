@@ -4,7 +4,7 @@ module.exports = {
     execute(message, args){
         // Relay exactly what the user sent to us only if they sent us something.
         if(args.length > 0)
-            message.channel.send(`https://www.urbandictionary.com/define.php?term=${args.join(" ")}`)
+            message.channel.send(`https://www.urbandictionary.com/define.php?term=${encodeURIComponent(args.join(" "))}`)
 
         // Otherwise just pong them.
         else
