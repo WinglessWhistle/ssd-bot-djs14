@@ -1,28 +1,30 @@
-const Discord = require('discord.js');
+const { Discord, Partials, GatewayIntentBits, Client, IntentsBitField } = require('discord.js');
 const path = require('path');
+const myIntents = new IntentsBitField();
 const Commands = require('./src/commands.js');
 const ErrorMsg = require('./src/reaction_errors.js');
+const { token } = require('./config.json');
 require('dotenv').config();
+
+// idk some djs14 bs
+myIntents.add(IntentsBitField.Flags.GuildPresences, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.MessageContent, IntentsBitField.Flags.GuildPresences, IntentsBitField.Flags.GuildMessages);
 
 // If something is not working correctly, Check that the intents are correct.
 // https://discord.com/developers/docs/topics/gateway#gateway-intents
-const client = new Discord.Client({
-    intents: [
-        "GUILDS",
-        "GUILD_MESSAGES",
-        "GUILD_MEMBERS",
-        "GUILD_MESSAGE_REACTIONS"
-    ]
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildPresences,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
+    partials: [Partials.Channel],
 });
 
-const prefix = '!';
-
-client.on('ready', () => {
-    log("Bot", 'Status set 👌');
-    client.user.setActivity('For Commands.', {
-        type: 'WATCHING',
-    });
-});
+//set prefix
+// eventually plan to move it to the config.json file
+const prefix = '^';
 
 // Load create our context and load our commands.
 const Context = {
@@ -35,19 +37,33 @@ const Context = {
 }
 Commands.LoadCommands(Discord, Context);
 
+//log when bot loaded
 client.once('ready', () => {
     log("Bot", 'SSD bot alive and ready. 😌');
 })
 
-// TODO: Can this be moved into another file or directory like events? What does it do @wingless?
-// Wjem someone join it says "Welcome @PersonsName" kinda useless but it is what it is.
+
+
+// events
+// 1. set status
+client.on('ready', () => {
+    log("Bot", 'Status set 👌');
+    client.user.setActivity('For Commands.', {
+        type: 'WATCHING',
+    });
+});
+
+// 2. welcome user
 client.on('guildMemberAdd', guildMember => {
 
     guildMember.guild.channels.cache.get('756455138977251433').send(`Welcome <@${guildMember.user.id}>!`)
 });
 
 
+
+// get message
 client.on('message', message => {
+    console.log(message)
     DoCommand(message);
 });
 
@@ -106,4 +122,4 @@ function ParseInput(msg) {
 }
 
 //Must Be Bottom Of File
-client.login(process.env.BOT_TOKEN);
+client.login(token);

@@ -1,5 +1,6 @@
 # Hide the important stuff awyay from peeking eyes.
 .env
+config.json
 
 # This is useless, nobody needs to see this except nodejs.
 node_modules

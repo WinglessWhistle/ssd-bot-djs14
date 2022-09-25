@@ -1,17 +1,20 @@
 {
-  "name": "pdbbot",
+  "name": "SSDBot",
   "version": "1.0.0",
-  "description": "pdb discord bot",
-  "main": "index.js",
+  "description": "SeeSharpeDen Discord Bot",
+  "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
-  "author": "WinglessWhistle",
+  "author": "SSD",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.25.0",
-    "discord.js": "^13.5.1",
+    "discord.js": "^14.4.0",
     "dotenv": "^10.0.0",
-    "node-watch": "^0.7.2"
+    "ffmpeg": "^0.0.4",
+    "node-watch": "^0.7.2",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
   }
 }
