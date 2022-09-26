@@ -1,6 +1,6 @@
 # See Sharp Den - Discord Bot.
 
-![Logo](https://media.discordapp.net/attachments/828464343388651531/930113520308215808/AmazingLogo.png)
+## updated/ing to DiscordJS v14
 
 Are you apart of the SSD [Discord Server](https://discord.gg/KaKQwv8)
 If so, you can PR commands in! Just make sure I know who you are.
@@ -16,5 +16,6 @@ Yellow hasn't been seen for a few weeks, that's kinda sus bro.
 - Clone this repository.
 - Install node.js v16 and above along with npm.
 - run `npm install` to install all the dependences for the bot.
-- Add the token environment variable `BOT_TOKEN` with your token. Alternatively use the `.env` file.
+- rename `example.config.json` to `config.json`. 
+- Add the token to `config.json` file you just renamed.
 - Run the bot with `npm run start`.
