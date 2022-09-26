@@ -1,13 +1,9 @@
-const { Discord, Partials, GatewayIntentBits, Client, IntentsBitField } = require('discord.js');
+const { Discord, Partials, SlashCommandBuilder, ActivityType, GatewayIntentBits, Client } = require('discord.js');
 const path = require('path');
-const myIntents = new IntentsBitField();
 const Commands = require('./src/commands.js');
 const ErrorMsg = require('./src/reaction_errors.js');
 const { token } = require('./config.json');
 require('dotenv').config();
-
-// idk some djs14 bs
-myIntents.add(IntentsBitField.Flags.GuildPresences, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.MessageContent, IntentsBitField.Flags.GuildPresences, IntentsBitField.Flags.GuildMessages);
 
 // If something is not working correctly, Check that the intents are correct.
 // https://discord.com/developers/docs/topics/gateway#gateway-intents
@@ -20,11 +16,18 @@ const client = new Client({
 		GatewayIntentBits.GuildMembers,
 	],
     partials: [Partials.Channel],
+    presence: {
+        activities: [{
+          name: "SeeSharpeDen.com",
+          type: 3
+        }],
+        status: 'online'
+      }
 });
 
 //set prefix
 // eventually plan to move it to the config.json file
-const prefix = '^';
+const prefix = '!';
 
 // Load create our context and load our commands.
 const Context = {
@@ -45,15 +48,7 @@ client.once('ready', () => {
 
 
 // events
-// 1. set status
-client.on('ready', () => {
-    log("Bot", 'Status set 👌');
-    client.user.setActivity('For Commands.', {
-        type: 'WATCHING',
-    });
-});
-
-// 2. welcome user
+// welcome user
 client.on('guildMemberAdd', guildMember => {
 
     guildMember.guild.channels.cache.get('756455138977251433').send(`Welcome <@${guildMember.user.id}>!`)
@@ -62,8 +57,7 @@ client.on('guildMemberAdd', guildMember => {
 
 
 // get message
-client.on('message', message => {
-    console.log(message)
+client.on('messageCreate', message => {
     DoCommand(message);
 });
 
@@ -93,6 +87,7 @@ function DoCommand(message) {
     // If there's ANY error. Pass it off the the ErrorMsg module.
     catch (e) {
         ErrorMsg.HandleError(message, e);
+        console.log(e);
     }
 }
 

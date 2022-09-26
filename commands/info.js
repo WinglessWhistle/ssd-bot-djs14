@@ -1,5 +1,5 @@
 const { exec } = require("child_process");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { hostname } = require("os");
 const { init } = require("./miitopia.js");
 gitDetails = null;
@@ -7,8 +7,8 @@ gitDetails = null;
         name: 'info',
         description: "displays info for this bot.",
         execute(message, args) {
-            const embed = new MessageEmbed()
-                .setColor("GREEN")
+            const embed = new EmbedBuilder()
+                .setColor("0x00FF00")
                 .setTitle("info")
                 .setDescription(`Latest commit hash: ${gitDetails[0]}
                 Latest commit date: ${gitDetails[1]}
